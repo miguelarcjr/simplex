@@ -1,0 +1,51 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 20px;
+}
+tr {
+  border-top: 1px solid #C1C3D1;
+  border-bottom: 1px solid #C1C3D1;
+  color: #666B85;
+  font-size: 16px;
+  font-weight: normal;
+  text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+}
+td {
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+  text-align: center;
+
+}
+
+h1 {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.4rem;
+  margin: 0;
+}
+p {
+  margin: 0;
+  font-size: 1.2rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  font-size: 1.2rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+th, td {
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+}

@@ -1,0 +1,61 @@
+<div class="grid" *ngIf="formReady">
+  <div class="col-12">
+    <h2 style="font-family: 'Space Mono', monospace; font-size:4rem;" class="gradiente">Simplex</h2>
+  </div>
+  <div class="col-12">
+    <h3 style="font-family: 'Space Mono', monospace; font-size:1.4rem;"> Função (Max.Z): </h3>
+  </div>
+  <ng-container *ngFor="let value of formFuncao.controls | keyvalue; let i = index; last as isLast" [formGroup]="formFuncao">
+    <div class="col-2">
+      <input type="number" [formControlName]="value.key" pInputText style="font-family: 'Space Mono', monospace; font-size:1.4rem;">
+    </div>
+    <div class="col-2">
+      <h3 style="font-family: 'Space Mono', monospace; font-size:1.4rem;">X<span style="font-size: 0.8rem;">{{i+1}}</span> <span *ngIf="!isLast">&nbsp;+</span> </h3>
+    </div>
+  </ng-container>
+
+  <div class="col-12">
+    <h3 style="font-family: 'Space Mono', monospace; font-size:1.4rem;"> Restrições:</h3>
+  </div>
+  <ng-container *ngFor="let itemForm of form.controls; let i = index">
+    <!-- <p>TESTE {{i}} - </p> -->
+    <div class="col-12">
+      <div class="grid grid-nogutter">
+        <ng-container *ngFor="let control of getControls(itemForm) as formCont; let i = index; last as isLast">
+          <!-- <p>COEF-{{i}} |</p> -->
+          <div class="col-2">
+            <input type="number" [formControl]="control" pInputText style="font-family: 'Space Mono', monospace; font-size:1.4rem;">
+          </div>
+          <div class="col-2">
+            <h3 *ngIf="!isLast" style="font-family: 'Space Mono', monospace; font-size:1.4rem;">X<span style="font-size: 0.8rem;">{{i+1}}</span> <span *ngIf="formCont.length-1 != i+1">&nbsp;+</span> <span *ngIf="formCont.length-1 == i+1">&nbsp;≤</span> </h3>
+          </div>
+
+        </ng-container>
+      </div>
+    </div>
+    <br>
+  </ng-container>
+  <!-- <ng-container *ngFor="let value of restricoes; let j = index">
+    <div class="col-12">
+      <div class="grid grid-nogutter">
+        <ng-container *ngFor="let value of coeficientesFuncao; let i = index">
+          <div class="col-2">
+            {{j}} e {{i}}
+            <input type="number" pInputText style="font-family: 'Space Mono', monospace; font-size:1.4rem;">
+          </div>
+          <div class="col-2">
+            <h3 style="font-family: 'Space Mono', monospace; font-size:1.4rem;">X<span style="font-size: 0.8rem;">{{i+1}}</span> <span *ngIf="i < (coeficientesFuncao.length-1)">&nbsp;+</span> </h3>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container> -->
+
+  <div class="col-12">
+    <div class="grid justify-content-center">
+      <div class="col-3">
+        <button pButton class="p-button-raised p-button-lg" type="button" label="Calcular" icon="pi pi-check" (click)="next()" style="background-color: #c7e7ff; border-color: #c7e7ff; color: #fffff7; font-family: 'Space Mono', monospace; font-size:1.5rem;"></button>
+      </div>
+    </div>
+  </div>
+</div>

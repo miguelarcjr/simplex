@@ -1,0 +1,28 @@
+<div class="grid">
+  <div class="col-12">
+    <h2 style="font-family: 'Space Mono', monospace; font-size:4rem;" class="gradiente">Simplex</h2>
+  </div>
+  <div class="col-12">
+    <h3 style="font-family: 'Space Mono', monospace; font-size:1rem;"> Alunos:<br> Miguel Junior, Isabelly Ferreira, Andre Aquilau  </h3>
+  </div>
+  <div class="col-12">
+    <h3 style="font-family: 'Space Mono', monospace; font-size:1.4rem;"> Quantidade de variável de decisão:</h3>
+  </div>
+  <div class="col-2">
+    <input id="float-input" type="number" [(ngModel)]="qtdVarDecisao" pInputText style="font-family: 'Space Mono', monospace; font-size:1.4rem;" autofocus>
+  </div>
+  <div class="col-12">
+    <h3 style="font-family: 'Space Mono', monospace; font-size:1.4rem;"> Quantidade de restrição:</h3>
+  </div>
+  <div class="col-2">
+    <input id="float-input" type="number" [(ngModel)]="qtdRestricoes" pInputText style="font-family: 'Space Mono', monospace; font-size:1.4rem;">
+  </div>
+
+  <div class="col-12">
+    <div class="grid justify-content-center">
+      <div class="col-3">
+        <button pButton class="p-button-raised p-button-lg" type="button" label="Continuar" icon="pi pi-check" (click)="next()" style="background-color: #c7e7ff; border-color: #c7e7ff; color: #fffff7; font-family: 'Space Mono', monospace; font-size:1.5rem;"></button>
+      </div>
+    </div>
+  </div>
+</div>

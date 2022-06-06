@@ -1,0 +1,44 @@
+<div class="grid">
+  <div class="col-12">
+    <h1>Resultado final:</h1>
+  </div>
+  <div class="col-12">
+    <table>
+      <thead>
+        <tr>
+          <th>Z</th>
+          <ng-container *ngFor="let item of createRange(simplex.qtdVarDecisao); let index = index">
+            <th>x{{index+1}}</th>
+          </ng-container>
+          <ng-container *ngFor="let item of createRange(simplex.qtdRestricoes); let index = index">
+            <th>xf{{index+1}}</th>
+          </ng-container>
+          <th>b</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let linha of tabela">
+          <td *ngFor="let item of linha">{{item}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-12">
+    <h1>Solução:</h1>
+  </div>
+  <div class="col-4">
+    <p>VB:</p>
+    <ul>
+      <li *ngFor="let item of vb">{{item.nome}}: {{item.valor}}</li>
+    </ul>
+  </div>
+  <div class="col-4">
+    <p>VNB:</p>
+    <ul>
+      <li *ngFor="let item of vnb">{{item.nome}}: {{item.valor}}</li>
+    </ul>
+  </div>
+  <div class="col-4">
+    <p>VALOR DE Z: {{valorZ}}</p>
+  </div>
+</div>
