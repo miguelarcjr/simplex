@@ -10,7 +10,8 @@ export class CalculoComponent implements OnInit {
 
   constructor(public simplex: SimplexService) { }
 
-  tabela: number[][] = [];
+  tabelaAtual: number[][] = [];
+  tabelas: number[][][] = [];
   cabecalho: any[] = [];
   vb: any[] = [];
   vnb: any[] = [];
@@ -23,37 +24,39 @@ export class CalculoComponent implements OnInit {
     console.log(this.simplex.funcaoZ)
     console.log(this.simplex.restricoes)
     console.log("MONTAR TABELA");
-    this.tabela = this.buildMatriz(this.simplex.qtdRestricoes+1, this.simplex.qtdVarDecisao+this.simplex.qtdRestricoes+2);
-    console.log(this.mostraMatriz(this.tabela));
+    this.tabelaAtual = this.buildMatriz(this.simplex.qtdRestricoes+1, this.simplex.qtdVarDecisao+this.simplex.qtdRestricoes+2);
+    console.log(this.mostraMatriz(this.tabelaAtual));
     //PREENCHER
     //Z
-    this.tabela[0][0] = 1;
+    this.tabelaAtual[0][0] = 1;
     for (let i = 0; i < this.simplex.funcaoZ.length; i++) {
-      this.tabela[0][i+1] = this.simplex.funcaoZ[i]*-1;
+      this.tabelaAtual[0][i+1] = this.simplex.funcaoZ[i]*-1;
     }
     //FOLGAS
     for (let i = 0; i < this.simplex.qtdRestricoes; i++) {
-      this.tabela[0][i+this.simplex.qtdVarDecisao+1] = 0;
+      this.tabelaAtual[0][i+this.simplex.qtdVarDecisao+1] = 0;
     }
     //B
-    this.tabela[0][this.tabela[0].length-1] = 0;
-    console.log(this.mostraMatriz(this.tabela));
+    this.tabelaAtual[0][this.tabelaAtual[0].length-1] = 0;
+    console.log(this.mostraMatriz(this.tabelaAtual));
     //RESTRICOES
     for (let i = 0; i < this.simplex.restricoes.length; i++) {
       //Z
-      this.tabela[i+1][0] = 0;
+      this.tabelaAtual[i+1][0] = 0;
       for (let j = 0; j < this.simplex.restricoes[i].length-1; j++) {
-        this.tabela[i+1][j+1] = this.simplex.restricoes[i][j];
+        this.tabelaAtual[i+1][j+1] = this.simplex.restricoes[i][j];
       }
       //FOLGAS
       for (let j = 0; j < this.simplex.qtdRestricoes; j++) {
-        this.tabela[i+1][j+this.simplex.qtdVarDecisao+1] = 0;
+        this.tabelaAtual[i+1][j+this.simplex.qtdVarDecisao+1] = 0;
       }
-      this.tabela[i+1][this.simplex.qtdVarDecisao+1+i] = 1;
+      this.tabelaAtual[i+1][this.simplex.qtdVarDecisao+1+i] = 1;
       //B
-      this.tabela[i+1][this.tabela[0].length-1] = this.simplex.restricoes[i][this.simplex.restricoes[i].length-1];
-      console.log(this.mostraMatriz(this.tabela));
+      this.tabelaAtual[i+1][this.tabelaAtual[0].length-1] = this.simplex.restricoes[i][this.simplex.restricoes[i].length-1];
+      console.log(this.mostraMatriz(this.tabelaAtual));
     }
+
+    this.tabelas.push(this.mostraMatriz(this.tabelaAtual));
 
     this.montarNovaTabela()
 
@@ -63,9 +66,9 @@ export class CalculoComponent implements OnInit {
     //Pega coluna com maior valor
     let maiorValor = 0;
     let colunaMaiorValor = 0;
-    for (let i = 0; i < this.tabela[0].length-1; i++) {
-      if (this.tabela[0][i] < maiorValor) {
-        maiorValor = this.tabela[0][i];
+    for (let i = 0; i < this.tabelaAtual[0].length-1; i++) {
+      if (this.tabelaAtual[0][i] < maiorValor) {
+        maiorValor = this.tabelaAtual[0][i];
         colunaMaiorValor = i;
       }
     }
@@ -75,8 +78,8 @@ export class CalculoComponent implements OnInit {
     //Pega os termos e divide pela coluna com maior valor
     let menorValor = 0;
     let linhaMenorValor = 0;//
-    for (let i = 0; i < this.tabela.length-1; i++) {
-      const res = this.tabela[i+1][this.tabela[0].length-1]/this.tabela[i+1][colunaMaiorValor]
+    for (let i = 0; i < this.tabelaAtual.length-1; i++) {
+      const res = this.tabelaAtual[i+1][this.tabelaAtual[0].length-1]/this.tabelaAtual[i+1][colunaMaiorValor]
       console.log(res);//
       if (res < menorValor && res > 0 || menorValor == 0) {
         menorValor = res;
@@ -86,33 +89,34 @@ export class CalculoComponent implements OnInit {
     console.log("MENOR VALOR: " + menorValor);
     console.log("LINHA MENOR VALOR: " + colunaMaiorValor);
     console.log("NLP: NOVA LINHA PIVOT:")
-    console.log(this.tabela[linhaMenorValor]);
-    const novaTabela = this.buildMatriz(this.tabela.length, this.tabela[0].length);
+    console.log(this.tabelaAtual[linhaMenorValor]);
+    const novaTabela = this.buildMatriz(this.tabelaAtual.length, this.tabelaAtual[0].length);
     const linhasNovaCalculada = [linhaMenorValor];
-    const novaLinhaPivo = this.tabela[linhaMenorValor].map(x => x/this.tabela[linhaMenorValor][colunaMaiorValor]).map(x => parseFloat(x.toFixed(3)));
+    const novaLinhaPivo = this.tabelaAtual[linhaMenorValor].map(x => x/this.tabelaAtual[linhaMenorValor][colunaMaiorValor]).map(x => parseFloat(x.toFixed(3)));
     novaTabela[linhaMenorValor] = novaLinhaPivo;
     console.log(novaTabela);
-    for (let i = 0; i < this.tabela.length; i++) {
+    for (let i = 0; i < this.tabelaAtual.length; i++) {
       if (i != linhaMenorValor) {
         //const novaLinha = this.tabela[i].map(x => x*-1).map(x => parseFloat(x.toFixed(3)));
         let novaLinha = novaLinhaPivo
-          .map(x => x*(this.tabela[i][colunaMaiorValor]*-1))
-          .map((x, j) => x+this.tabela[i][j])
+          .map(x => x*(this.tabelaAtual[i][colunaMaiorValor]*-1))
+          .map((x, j) => x+this.tabelaAtual[i][j])
           .map(x => parseFloat(x.toFixed(3)))
         novaTabela[i] = novaLinha;
         linhasNovaCalculada.push(i);
       }
     }
-    this.tabela = this.mostraMatriz(novaTabela);
+    this.tabelaAtual = this.mostraMatriz(novaTabela);
+    this.tabelas.push(this.mostraMatriz(novaTabela));
     console.log("TABELA FINAL: ");
-    console.log(this.tabela);
-    if(this.tabela[0].find(x => x < 0)) {
+    console.log(this.tabelaAtual);
+    if(this.tabelaAtual[0].find(x => x < 0)) {
       console.log("SOLUCAO NAO OTIMA! MONTAR NOVA TABELA:")
       this.montarNovaTabela();
     }else {
       console.log("SOLUCAO OTIMA!");
       console.log("RESULTADO: ");
-      console.log(this.tabela);
+      console.log(this.tabelaAtual);
       this.mostraResultado();
     }
   }
@@ -132,14 +136,14 @@ export class CalculoComponent implements OnInit {
     for (let c = 1; c < this.cabecalho.length-1; c++) {
       console.log(this.cabecalho[c]);
       let coluna = [];
-      for (let l = 0; l < this.tabela.length; l++) {
-        coluna.push(this.tabela[l][c]);
+      for (let l = 0; l < this.tabelaAtual.length; l++) {
+        coluna.push(this.tabelaAtual[l][c]);
       }
-      if(coluna.find(x => x == 1) && coluna.filter(x => x == 0).length === this.tabela.length-1) {
+      if(coluna.find(x => x == 1) && coluna.filter(x => x == 0).length === this.tabelaAtual.length-1) {
         console.log("Variavel Basicas: ");
         console.log(coluna);
         let linhaIndex = coluna.findIndex(x => x == 1);
-        vb.push({nome: this.cabecalho[c], valor: this.tabela[linhaIndex][this.tabela[0].length-1]});
+        vb.push({nome: this.cabecalho[c], valor: this.tabelaAtual[linhaIndex][this.tabelaAtual[0].length-1]});
       }
     }
     this.vb = vb;
@@ -153,7 +157,7 @@ export class CalculoComponent implements OnInit {
     console.log(this.vb)
     console.log("VNB FINAL")
     console.log(this.vnb)
-    this.valorZ = this.tabela[0][this.tabela[0].length-1];
+    this.valorZ = this.tabelaAtual[0][this.tabelaAtual[0].length-1];
     console.log("Valor Z: " + this.valorZ);
 
     console.log(this.cabecalho);
